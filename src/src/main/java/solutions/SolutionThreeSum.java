@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-public class Solution {
+public class SolutionThreeSum {
     public static List<List<Integer>> threeSum(int[] nums) {
         int len = nums.length;
         List<List<Integer>> result = new ArrayList<>();
