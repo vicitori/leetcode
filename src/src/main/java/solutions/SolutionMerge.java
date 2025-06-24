@@ -1,11 +1,9 @@
 package solutions;
 
-import java.util.Objects;
-
 public class SolutionMerge {
     public static class ListNode {
-        int val;
-        ListNode next;
+        public int val;
+        public ListNode next;
 
         public ListNode() {
         }
@@ -23,47 +21,45 @@ public class SolutionMerge {
     // function for making list from array
     // function for extracting array from list
     // function for reverse list
-    // ? function for iterating by the list
     public static ListNode mergeTwoLists(ListNode list1, ListNode list2) {
-        ListNode ptrList1 = list1;
-        ListNode ptrList2 = list2;
-        ListNode revList1 = new ListNode();
-        revList1.val = ptrList1.val;
-        ptrList1 = ptrList1.next;
-        while (!Objects.equals(ptrList1, new ListNode())) {
-            revList1 = new ListNode(ptrList1.val, revList1);
-            ptrList1 = ptrList1.next;
-        }
+        // mockery using functional style
+//        return switch (list1 == null ? 0 : list2 == null ? 1 : 2 ) {
+//            case 0 -> list2;
+//            case 1 -> list1;
+//            default -> {
+//                if (list1.val < list2.val) {
+//                    list1.next = mergeTwoLists(list1.next, list2);
+//                    yield list1;
+//                } else {
+//                    list2.next = mergeTwoLists(list1, list2.next);
+//                    yield list2;
+//                }
+//            }
+//        };
 
-        ListNode revList2 = new ListNode();
-        revList2.val = ptrList2.val;
-        ptrList2 = ptrList2.next;
-        while (!Objects.equals(ptrList2, new ListNode())) {
-            revList2 = new ListNode(ptrList2.val, revList2);
-            ptrList2 = ptrList2.next;
-        }
+        // norm iterative implementation
+        if (list1 == null) return list2;
+        if (list2 == null) return list1;
 
-        ListNode result = new ListNode();
-        int val1 = ptrList1.val;
-        int val2 = ptrList2.val;
-        while(!Objects.equals(ptrList1, new ListNode())) {
-            while (val2 < val1) {
-                result = new ListNode(val2, result);
-                ptrList2 = ptrList2.next;
-                if (!Objects.equals(ptrList2, new ListNode())) {
-                    continue;
-                }
-                val2 = ptrList2.val;
+        ListNode dummy = new ListNode();
+        ListNode tail = dummy;
+        while (list1 != null && list2 != null) {
+            if (list1.val < list2.val) {
+                tail.next = new ListNode(list1.val);
+                tail = tail.next;
+                list1 = list1.next;
+            } else {
+                tail.next = new ListNode(list2.val);
+                tail = tail.next;
+                list2 = list2.next;
             }
-            result = new ListNode(val1, result);
-            ptrList1 = ptrList1.next;
-            if (!Objects.equals(ptrList2, new ListNode())) {
-                continue;
-            }
-            val1 = ptrList1.val;
         }
-        return result;
 
-
+        if (list1 == null) {
+            tail.next = list2;
+            return dummy.next;
+        }
+        tail.next = list1;
+        return dummy.next;
     }
 }
