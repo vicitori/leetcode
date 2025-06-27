@@ -1,34 +1,26 @@
 package solutions;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.*;
 
 public class SolutionTopK {
     public static int[] topKFrequent(int[] nums, int k) {
         HashMap<Integer, Integer> freqs = new HashMap<>();
-        ArrayList<Integer> maxNums = new ArrayList<>();
-        maxNums.add(-10^4);
         for (int num : nums) {
-            int cnt = 0;
-            try {
-                cnt = freqs.get(num);
-            } catch (NullPointerException e) {
-                freqs.put(num, 0);
-            }
-            cnt += 1;
-            freqs.put(num, cnt);
-
-            for (int i = 0; i < maxNums.toArray().length; i++) {
-                if (cnt >= freqs.get(maxNums.get(i)) && num != maxNums.get(i)) {
-                    maxNums.add(i, num);
-                    if (maxNums.size() > k) {
-                        maxNums.removeLast();
-                    }
-                    break;
-                }
-            }
+            freqs.put(num, freqs.getOrDefault(num, 0) + 1);
         }
 
-        return maxNums.stream().mapToInt(i -> i).toArray();
+        List<Integer>[] freqBuckets = new List[nums.length + 1]; // + 1 because count starts from number 1 not 0
+        for (int i = 0; i < freqBuckets.length; i++) freqBuckets[i] = new ArrayList<>();
+        for (int num : freqs.keySet()) {
+            freqBuckets[freqs.get(num)].add(num);
+        }
+
+        List<Integer> result = new ArrayList<>(k);
+        int cnt = 0;
+        for (int i = freqBuckets.length - 1; i > 0; i--) {
+            result.addAll(freqBuckets[i]);
+            if ((cnt += freqBuckets[i].toArray().length) >= k ) break;
+        }
+        return result.stream().mapToInt(Integer::intValue).toArray();
     }
 }

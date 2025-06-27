@@ -2,7 +2,6 @@ plugins {
     id("java")
 }
 
-group = "org.example"
 version = "1.0-SNAPSHOT"
 
 repositories {
@@ -16,4 +15,10 @@ dependencies {
 
 tasks.test {
     useJUnitPlatform()
+
+    maxHeapSize = "1G"
+
+    testLogging {
+        events("passed")
+    }
 }
